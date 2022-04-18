@@ -29,7 +29,8 @@ namespace GRP.Runtime
             ExecuteBuffer();
         }
         
-        public void Render(ScriptableRenderContext _context, Camera _camera)
+        public void Render(ScriptableRenderContext _context, Camera _camera,
+            bool _enableInstancing,bool _enableDynamicBatching)
         {
             m_context = _context;
             m_camera = _camera;
@@ -40,17 +41,21 @@ namespace GRP.Runtime
                 return;
             }
             SetUp();
-            DrawVisibleGeometry();
+            DrawVisibleGeometry(_enableInstancing,_enableDynamicBatching);
             DrawUnSupportedShaders();
             DrawGizmos();
             Submit();
         }
 
 
-        private void DrawVisibleGeometry()
+        private void DrawVisibleGeometry(bool _enableInstancing,bool _enableDynamicBatching)
         {
             var sortSetting = new SortingSettings(m_camera){criteria = SortingCriteria.CommonOpaque};
-            var drawingSetting = new DrawingSettings(k_unlitShaderTagId,sortSetting);
+            var drawingSetting = new DrawingSettings(k_unlitShaderTagId,sortSetting)
+            {
+                enableInstancing = _enableInstancing,
+                enableDynamicBatching = _enableDynamicBatching
+            };
             var filteringSetting = new FilteringSettings(RenderQueueRange.opaque);
             m_context.DrawRenderers(m_cullingResults,ref drawingSetting,ref filteringSetting);
             
