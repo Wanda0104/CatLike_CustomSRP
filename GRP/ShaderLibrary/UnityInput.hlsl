@@ -5,6 +5,7 @@ float4x4 unity_ObjectToWorld;
 float4x4 unity_WorldToObject;
 float4 unity_LODFade;
 real4 unity_WorldTransformParams;
+float3 _WorldSpaceCameraPos;
 CBUFFER_END
 float4x4 unity_MatrixVP;
 float4x4 unity_MatrixV;

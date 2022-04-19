@@ -9,10 +9,12 @@ namespace GRP.Runtime
         private Camera m_camera;
         private CommandBuffer m_cmd;
         private CullingResults m_cullingResults;
+        private Lighting m_lighting = new Lighting();
         
         private const string k_bufferName = "[GRP] Render Camera";
         
         private ShaderTagId k_unlitShaderTagId = new ShaderTagId("SRPDefaultUnlit");
+        private ShaderTagId k_litShaderTagId = new ShaderTagId("CustomLight");
 
         public CameraRenderer()
         {
@@ -41,6 +43,7 @@ namespace GRP.Runtime
                 return;
             }
             SetUp();
+            m_lighting.SetUp(_context,m_cullingResults);
             DrawVisibleGeometry(_enableInstancing,_enableDynamicBatching);
             DrawUnSupportedShaders();
             DrawGizmos();
@@ -56,6 +59,8 @@ namespace GRP.Runtime
                 enableInstancing = _enableInstancing,
                 enableDynamicBatching = _enableDynamicBatching
             };
+            drawingSetting.SetShaderPassName(1,k_litShaderTagId);
+            
             var filteringSetting = new FilteringSettings(RenderQueueRange.opaque);
             m_context.DrawRenderers(m_cullingResults,ref drawingSetting,ref filteringSetting);
             

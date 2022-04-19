@@ -14,6 +14,7 @@ public class GEMRenderPipeline : RenderPipeline
         useDynamicBatching = _useDynamicBatching;
         useGPUInstancing = _useGPUInstancing;
         GraphicsSettings.useScriptableRenderPipelineBatching = _useSRPBatcher;
+        GraphicsSettings.lightsUseLinearIntensity = true;
     }
     protected override void Render(ScriptableRenderContext _context, Camera[] _cameras)
     {

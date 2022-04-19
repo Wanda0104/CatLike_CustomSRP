@@ -6,12 +6,14 @@ using Random = UnityEngine.Random;
 
 public class PerObjectMaterialProperties : MonoBehaviour
 {
-    private static int baseColorId = Shader.PropertyToID("_BaseColor");
-    private static int cutoffId = Shader.PropertyToID("_Cutoff");
+    private static int baseColorId = Shader.PropertyToID("_BaseColor"),
+        cutoffId = Shader.PropertyToID("_Cutoff"),
+        metallicId = Shader.PropertyToID("_Metallic"),
+        smoothnessId = Shader.PropertyToID("_Smoothness");
     [SerializeField]
     private Color baseColor = Color.white;
     [SerializeField,Range(0f,1f)]
-    private float cutoff = 0.5f;
+    private float cutoff = 0.5f ,metallic = 0f, smoothness = 0.5f;
     static MaterialPropertyBlock _materialPropertyBlock; 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +34,8 @@ public class PerObjectMaterialProperties : MonoBehaviour
         cutoff = Random.Range(0f, 1f);
         _materialPropertyBlock.SetColor(baseColorId,baseColor);
         _materialPropertyBlock.SetFloat(cutoffId,cutoff);
+        _materialPropertyBlock.SetFloat(metallicId, metallic);
+        _materialPropertyBlock.SetFloat(smoothnessId, smoothness);
         gameObject.GetComponent<Renderer>().SetPropertyBlock(_materialPropertyBlock);
     }
 
