@@ -24,7 +24,7 @@ public class GEMRenderPipeline : RenderPipeline
     {
         foreach (var _camera in _cameras)
         {
-            _cameraRenderer.Render(_context,_camera,useDynamicBatching,useGPUInstancing);
+            _cameraRenderer.Render(_context,_camera,useGPUInstancing,useDynamicBatching);
         }   
     }
 }
