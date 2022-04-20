@@ -7,14 +7,15 @@ using UnityEngine.Rendering;
 public class GEMRenderPipeline : RenderPipeline
 {
     private CameraRenderer _cameraRenderer = new CameraRenderer();
-    bool useDynamicBatching, useGPUInstancing;
-    
-    public GEMRenderPipeline(bool _useDynamicBatching, bool _useGPUInstancing, bool _useSRPBatcher)
+    private bool useDynamicBatching, useGPUInstancing;
+    private ShadowSettings shadowSettings;
+    public GEMRenderPipeline(bool _useDynamicBatching, bool _useGPUInstancing, bool _useSRPBatcher,ShadowSettings _shadowSettings)
     {
         useDynamicBatching = _useDynamicBatching;
         useGPUInstancing = _useGPUInstancing;
         GraphicsSettings.useScriptableRenderPipelineBatching = _useSRPBatcher;
         GraphicsSettings.lightsUseLinearIntensity = true;
+        shadowSettings = _shadowSettings;
     }
     protected override void Render(ScriptableRenderContext _context, Camera[] _cameras)
     {
@@ -25,7 +26,7 @@ public class GEMRenderPipeline : RenderPipeline
     {
         foreach (var _camera in _cameras)
         {
-            _cameraRenderer.Render(_context,_camera,useGPUInstancing,useDynamicBatching);
+            _cameraRenderer.Render(_context,_camera,useGPUInstancing,useDynamicBatching,shadowSettings);
         }   
     }
 }

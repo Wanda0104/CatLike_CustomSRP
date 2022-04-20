@@ -32,21 +32,26 @@ namespace GRP.Runtime
         }
         
         public void Render(ScriptableRenderContext _context, Camera _camera,
-            bool _enableInstancing,bool _enableDynamicBatching)
+            bool _enableInstancing,bool _enableDynamicBatching,
+            ShadowSettings shadowSettings)
         {
             m_context = _context;
             m_camera = _camera;
             PrepareBuffer();
             PrepareForSceneWindow();
-            if (!Cull())
+            if (!Cull(shadowSettings.maxDistance))
             {
                 return;
             }
+            m_cmd.BeginSample(SampleName);
+            ExecuteBuffer();
+            m_lighting.SetUp(_context,m_cullingResults,shadowSettings);
+            m_cmd.EndSample(SampleName);
             SetUp();
-            m_lighting.SetUp(_context,m_cullingResults);
             DrawVisibleGeometry(_enableInstancing,_enableDynamicBatching);
             DrawUnSupportedShaders();
             DrawGizmos();
+            m_lighting.CleanUp();
             Submit();
         }
 
@@ -84,10 +89,11 @@ namespace GRP.Runtime
             m_cmd.Clear();
         }
 
-        private bool Cull()
+        private bool Cull(float maxShadowDistance)
         {
             if (m_camera.TryGetCullingParameters(out var p))
             {
+                p.shadowDistance = Mathf.Min(maxShadowDistance,m_camera.farClipPlane);
                 m_cullingResults = m_context.Cull(ref p);
                 return true;
             }
