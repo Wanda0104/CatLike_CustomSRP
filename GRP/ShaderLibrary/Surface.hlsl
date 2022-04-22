@@ -5,6 +5,7 @@ struct Surface {
     float3 normal;
     float3 color;
     float3 viewDirection;
+    float depth;
     float alpha;
     float metallic;
     float smoothness;

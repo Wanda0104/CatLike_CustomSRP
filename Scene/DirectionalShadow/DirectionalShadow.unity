@@ -199,8 +199,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 601186692}
-  m_LocalRotation: {x: -0.48903936, y: 0.16613875, z: -0.088995956, w: -0.85165614}
-  m_LocalPosition: {x: 5.9388537, y: 17.18438, z: -10.74607}
+  m_LocalRotation: {x: 0.32587186, y: 0.5961563, z: -0.29781562, w: 0.67060506}
+  m_LocalPosition: {x: -12.338414, y: 11.302334, z: 0.8635509}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -238,8 +238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.24685533, g: 0.00035043445, b: 0.85455155, a: 0.7093529}
-  cutoff: 0.72113645
+  baseColor: {r: 0.72438043, g: 0.632167, b: 0.0047517396, a: 0.8367002}
+  cutoff: 0.32469684
   metallic: 0
   smoothness: 0.5
 --- !u!65 &643191580
@@ -350,8 +350,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.43085727, g: 0.11955767, b: 0.5422999, a: 0.89854145}
-  cutoff: 0.20591605
+  baseColor: {r: 0.19727708, g: 0.24077478, b: 0.16696657, a: 0.03710318}
+  cutoff: 0.76147914
   metallic: 0
   smoothness: 0.5
 --- !u!135 &656657391
@@ -462,8 +462,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.66217273, g: 0.59951353, b: 0.55185264, a: 0.8458953}
-  cutoff: 0.88579226
+  baseColor: {r: 0.19552162, g: 0.19503702, b: 0.19321758, a: 0.48158163}
+  cutoff: 0.40932196
   metallic: 0
   smoothness: 0.5
 --- !u!135 &703023600
@@ -574,8 +574,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.14336045, g: 0.19133735, b: 0.77158296, a: 0.34741154}
-  cutoff: 0.13978839
+  baseColor: {r: 0.6440619, g: 0.78540635, b: 0.34941435, a: 0.48754388}
+  cutoff: 0.78399837
   metallic: 0
   smoothness: 0.5
 --- !u!135 &841575255
@@ -686,8 +686,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.18632808, g: 0.14397341, b: 0.38305277, a: 0.86260355}
-  cutoff: 0.400034
+  baseColor: {r: 0.23718382, g: 0.4728499, b: 0.21073787, a: 0.18866268}
+  cutoff: 0.22242057
   metallic: 0
   smoothness: 0.5
 --- !u!65 &842956561
@@ -798,8 +798,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.4885066, g: 0.44747064, b: 0.73089474, a: 0.29185763}
-  cutoff: 0.65108335
+  baseColor: {r: 0.12662919, g: 0.12781954, b: 0.13248755, a: 0.5309654}
+  cutoff: 0.28112537
   metallic: 0
   smoothness: 0.5
 --- !u!65 &966603297
@@ -1003,8 +1003,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.72798705, g: 0.9130435, b: 0.41074547, a: 0.7942339}
-  cutoff: 0.8864851
+  baseColor: {r: 0.7795353, g: 0.18756856, b: 0.84841776, a: 0.71449953}
+  cutoff: 0.36942834
   metallic: 0
   smoothness: 0.5
 --- !u!65 &1190281734
@@ -1115,8 +1115,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.11802449, g: 0.11826508, b: 0.12663366, a: 0.7822828}
-  cutoff: 0.4158551
+  baseColor: {r: 0.6788379, g: 0.71387523, b: 0.44024226, a: 0.78621244}
+  cutoff: 0.25870317
   metallic: 0
   smoothness: 0.5
 --- !u!135 &1225911228
@@ -1320,8 +1320,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.028543673, g: 0.040410973, b: 0.045329574, a: 0.81690466}
-  cutoff: 0.5784913
+  baseColor: {r: 0.34942263, g: 0.045363955, b: 0.8036808, a: 0.44776338}
+  cutoff: 0.14869392
   metallic: 0
   smoothness: 0.5
 --- !u!65 &1463593618
@@ -1528,8 +1528,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.9790524, g: 0.42482957, b: 0.18708968, a: 0.8215313}
-  cutoff: 0.7137511
+  baseColor: {r: 0.32013816, g: 0.39778703, b: 0.31181297, a: 0.87176776}
+  cutoff: 0.46784312
   metallic: 0
   smoothness: 0.5
 --- !u!65 &1585324498
@@ -1640,8 +1640,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.0077165556, g: 0.29237464, b: 0.09939588, a: 0.293528}
-  cutoff: 0.47053415
+  baseColor: {r: 0.28737262, g: 0.43761533, b: 0.45625, a: 0.5431672}
+  cutoff: 0.07973158
   metallic: 0
   smoothness: 0.5
 --- !u!65 &1635740000
@@ -1828,10 +1828,103 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.08742843, g: 0.46588892, b: 0.39504144, a: 0.1621008}
-  cutoff: 0.25195235
+  baseColor: {r: 0.16229638, g: 0.16808586, b: 0.25320652, a: 0.24560693}
+  cutoff: 0.702912
   metallic: 0
   smoothness: 0.5
+--- !u!1 &1709989754
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1709989756}
+  - component: {fileID: 1709989755}
+  m_Layer: 0
+  m_Name: Directional Light (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!108 &1709989755
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709989754}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 1
+  m_Shape: 0
+  m_Color: {r: 0.33241364, g: 0.36190376, b: 0.8490566, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 1
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!4 &1709989756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709989754}
+  m_LocalRotation: {x: -0.027805243, y: 0.83242494, z: -0.5525121, w: -0.03203038}
+  m_LocalPosition: {x: 2.200801, y: 19.358345, z: 9.535406}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1875567644
 GameObject:
   m_ObjectHideFlags: 0
@@ -1864,8 +1957,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.4074015, g: 0.11096722, b: 0.3378741, a: 0.5143587}
-  cutoff: 0.13994539
+  baseColor: {r: 0.41531855, g: 0.19778565, b: 0.19829257, a: 0.077176936}
+  cutoff: 0.5985872
   metallic: 0
   smoothness: 0.5
 --- !u!135 &1875567646
@@ -1976,8 +2069,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.27922934, g: 0.21658547, b: 0.2970858, a: 0.25712922}
-  cutoff: 0.47757536
+  baseColor: {r: 0.1491701, g: 0.055182695, b: 0.19453588, a: 0.8590894}
+  cutoff: 0.5012916
   metallic: 0
   smoothness: 0.5
 --- !u!65 &2008715931
@@ -2088,8 +2181,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a030f6f57ce92431daf46028efda4b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.0020541418, g: 0.042251814, b: 0.09152294, a: 0.43621212}
-  cutoff: 0.4339066
+  baseColor: {r: 0.30975792, g: 0.50759584, b: 0.2909226, a: 0.67317635}
+  cutoff: 0.7101743
   metallic: 0
   smoothness: 0.5
 --- !u!135 &2103919593
