@@ -29,13 +29,13 @@ BRDF GetBRDF(Surface surface, bool applyAlphaToDiffuse = false)
 
 float SpecularStrength(Surface surface,BRDF brdf,Light light)
 {
-    float h = SafeNormalize(surface.viewDirection + light.direction);
-    float n_dot_h2 = Square(saturate(dot(surface.normal,h)));
-    float l_dot_h2 = Square(saturate(dot(light.direction,h)));
+    float3 h = SafeNormalize(light.direction + surface.viewDirection );
+    float nh2 = Square(saturate(dot(surface.normal,h)));
+    float lh2 = Square(saturate(dot(light.direction,h)));
     float r2 = Square(brdf.roughness);
-    float d2 = Square(n_dot_h2 * (r2 - 1.0) + 1.00001);
+    float d2 = Square(nh2 * (r2 - 1.0) + 1.00001);
     float normalization = brdf.roughness * 4.0 + 2.0;
-    return r2 / (d2 * max(0.1, l_dot_h2) * normalization);
+    return r2 / (d2 * max(0.1, lh2) * normalization);
 }
 
 float3 DirectBRDF (Surface surface, BRDF brdf, Light light) {

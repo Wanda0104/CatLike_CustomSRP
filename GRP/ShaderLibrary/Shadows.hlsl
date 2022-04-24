@@ -1,5 +1,17 @@
 #ifndef GRP_UNITY_SHADOW_INCLUDED
 #define GRP_UNITY_SHADOW_INCLUDED
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Shadow/ShadowSamplingTent.hlsl"
+
+#if defined(_DIRECTIONAL_PCF3)
+    #define DIRECTIONAL_FILTER_SAMPLES 4
+    #define DIRECTIONAL_FILTER_SETUP SampleShadow_ComputeSamples_Tent_3x3
+#elif defined(_DIRECTIONAL_PCF5)
+    #define DIRECTIONAL_FILTER_SAMPLES 9
+    #define DIRECTIONAL_FILTER_SETUP SampleShadow_ComputeSamples_Tent_5x5
+#elif defined(_DIRECTIONAL_PCF7)
+    #define DIRECTIONAL_FILTER_SAMPLES 16
+    #define DIRECTIONAL_FILTER_SETUP SampleShadow_ComputeSamples_Tent_7x7
+#endif
 #define MAX_SHADOWED_DIRECTIONAL_LIGHT_COUNT 4
 #define MAX_CASCADE_COUNT 4
 TEXTURE2D_SHADOW(_DirectionalShadowAtlas);
@@ -9,39 +21,69 @@ CBUFFER_START(_CustomShadows)
     float4x4 _DirectionalShadowMatrices[MAX_SHADOWED_DIRECTIONAL_LIGHT_COUNT * MAX_CASCADE_COUNT];
     int _CascadeCount;
     float4 _CascadeCullingSpheres[MAX_CASCADE_COUNT];
+    float4 _CascadeDatas[MAX_CASCADE_COUNT];
     float4 _ShadowDistanceFade;
+    float4 _ShadowAtlasSize;
 CBUFFER_END
+//DirecationalShadowData 由Light组件数据和当前Surface的ShadowData 计算得知
 struct DirectionalShadowData
 {
     float strength;
     float tileIndex;
+    float normalBias;
 };
 
+//阴影数据 来源于ShadowMap
 struct ShadowData
 {
     int cascadeIndex;
     float strength;
 };
 
+
 //STS >> Shadow Texture Space
 float SampleDirectionalShadowAtlas(float3 positionSTS)
 {
+    /*
+     * It needs the texture, the sampler state, and the shadow position as arguments.
+     * The result is 1 when the position's Z value is less than what's stored in the shadow map,
+     * meaning that it is closer to the light than whatever's casting a shadow.
+     * Otherwise, it is behind a shadow caster and the result is zero.
+     */
     return SAMPLE_TEXTURE2D_SHADOW(_DirectionalShadowAtlas,sampler_DirectionalShadowAtlas,positionSTS);
 }
 
-float GetDirectionalShadowAttenuation(DirectionalShadowData directional_shadow_data,Surface surfaceWS)
+float FilterDirectionalShadow(float3 positionSTS)
+{
+    #if defined(DIRECTIONAL_FILTER_SETUP)
+        float weights[DIRECTIONAL_FILTER_SAMPLES];
+        float2 positions[DIRECTIONAL_FILTER_SAMPLES];
+        float4 size = _ShadowAtlasSize.yyxx;
+        DIRECTIONAL_FILTER_SETUP(size, positionSTS.xy, weights, positions);
+        float shadow = 0;
+        for (int i = 0; i < DIRECTIONAL_FILTER_SAMPLES; i++) {
+            shadow += weights[i] * SampleDirectionalShadowAtlas(
+                float3(positions[i].xy, positionSTS.z)
+            );
+        }
+        return shadow;
+    #else
+        return SampleDirectionalShadowAtlas(positionSTS);
+    #endif
+}
+
+float GetDirectionalShadowAttenuation(DirectionalShadowData directional_shadow_data,ShadowData shadow_data,Surface surfaceWS)
 {
     if (directional_shadow_data.strength <= 0)
     {
         return 1.0;
     }
-    
+    float3 normalBias = surfaceWS.normal * (_CascadeDatas[shadow_data.cascadeIndex].y * directional_shadow_data.normalBias);
     float3 positionSTS = mul(
         _DirectionalShadowMatrices[directional_shadow_data.tileIndex],
-        float4(surfaceWS.position, 1.0)
+        float4(surfaceWS.position + normalBias, 1.0)
     ).xyz;
-    //用Surface的真实位置去 ShadowMap中采样，导致采样结果与真实的阴影信息不同 会导致 ShadowAcne
-    float shadow = SampleDirectionalShadowAtlas(positionSTS);
+    float shadow = FilterDirectionalShadow(positionSTS);
     return lerp(1.0,shadow,directional_shadow_data.strength);
 }
 
@@ -60,7 +102,7 @@ ShadowData GetShadowData(Surface surfaceWS)
         if (distanceSqr < sphere.w) {
             if (i == _CascadeCount - 1) {
                 data.strength *= FadedShadowStrength(
-                    distanceSqr, 1.0 / sphere.w, _ShadowDistanceFade.z
+                    distanceSqr, _CascadeDatas[i], _ShadowDistanceFade.z
                 );
             }
             break;
@@ -70,8 +112,8 @@ ShadowData GetShadowData(Surface surfaceWS)
     {
         data.strength = 0.0;
     }
-    
     data.cascadeIndex = i;
     return data;
 }
+
 #endif
