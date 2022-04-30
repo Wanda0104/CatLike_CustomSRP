@@ -38,6 +38,7 @@ struct ShadowData
 {
     int cascadeIndex;
     float strength;
+    float cascadeBlend;
 };
 
 
@@ -78,12 +79,25 @@ float GetDirectionalShadowAttenuation(DirectionalShadowData directional_shadow_d
     {
         return 1.0;
     }
+    
     float3 normalBias = surfaceWS.normal * (_CascadeDatas[shadow_data.cascadeIndex].y * directional_shadow_data.normalBias);
     float3 positionSTS = mul(
         _DirectionalShadowMatrices[directional_shadow_data.tileIndex],
         float4(surfaceWS.position + normalBias, 1.0)
     ).xyz;
     float shadow = FilterDirectionalShadow(positionSTS);
+    //Blend Cascade
+    if (shadow_data.cascadeBlend < 1.0f)
+    {
+        float3 normalBias = surfaceWS.normal * (_CascadeDatas[shadow_data.cascadeIndex + 1 ].y * directional_shadow_data.normalBias);
+        float3 positionSTS = mul(
+            _DirectionalShadowMatrices[directional_shadow_data.tileIndex + 1],
+            float4(surfaceWS.position + normalBias, 1.0)
+        ).xyz;
+        shadow = lerp(
+            FilterDirectionalShadow(positionSTS), shadow, shadow_data.cascadeBlend
+        );
+    }
     return lerp(1.0,shadow,directional_shadow_data.strength);
 }
 
@@ -96,14 +110,20 @@ ShadowData GetShadowData(Surface surfaceWS)
     ShadowData data;
     int i;
     data.strength = FadedShadowStrength(surfaceWS.depth,_ShadowDistanceFade.x,_ShadowDistanceFade.y);
+    data.cascadeBlend = 1.0;
     for (i = 0; i < _CascadeCount; i++) {
         float4 sphere = _CascadeCullingSpheres[i];
         float distanceSqr = DistanceSquared(surfaceWS.position, sphere.xyz);
         if (distanceSqr < sphere.w) {
+            float fade = FadedShadowStrength(
+                distanceSqr, _CascadeDatas[i].x, _ShadowDistanceFade.z
+            );
             if (i == _CascadeCount - 1) {
-                data.strength *= FadedShadowStrength(
-                    distanceSqr, _CascadeDatas[i], _ShadowDistanceFade.z
-                );
+                data.strength *= fade;
+            }
+            else
+            {
+                data.cascadeBlend = fade;
             }
             break;
         }
@@ -112,6 +132,14 @@ ShadowData GetShadowData(Surface surfaceWS)
     {
         data.strength = 0.0;
     }
+    #if defined(_CASCADE_BLEND_DITHER)
+    else if (data.cascadeBlend < surfaceWS.dither) {
+        i += 1;
+    }
+    #endif
+    #if !defined(_CASCADE_BLEND_SOFT)
+        data.cascadeBlend = 1.0;
+    #endif
     data.cascadeIndex = i;
     return data;
 }

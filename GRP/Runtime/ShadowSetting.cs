@@ -9,6 +9,9 @@ public class ShadowSettings {
 	public enum FilterMode {
 		PCF2x2, PCF3x3, PCF5x5, PCF7x7
 	}
+	public enum CascadeBlendMode {
+		Hard, Soft, Dither
+	}
 	
 	[System.Serializable]
 	public struct Directional {
@@ -25,7 +28,8 @@ public class ShadowSettings {
 		public float cascadeFade;
 
 		public FilterMode filterMode;
-
+		
+		public CascadeBlendMode CascadeBlendMode;
 	}
 
 	public Directional directional = new Directional {
@@ -36,6 +40,7 @@ public class ShadowSettings {
 		cascadeRatio3 = 0.5f,
 		cascadeFade = 0.1f,
 		filterMode = FilterMode.PCF2x2,
+		CascadeBlendMode = CascadeBlendMode.Hard,
 	};
 	[Min(0.001f)]
 	public float maxDistance = 100f;

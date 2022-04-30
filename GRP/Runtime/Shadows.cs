@@ -29,6 +29,11 @@ public class Shadows
         "_DIRECTIONAL_PCF7",
     };
     
+    static string[] cascadeBlendKeywords = {
+        "_CASCADE_BLEND_SOFT",
+        "_CASCADE_BLEND_DITHER"
+    };
+    
     //xyz pos, w radius
     static Vector4[] cascadeCullingSpheres = new Vector4[maxCascades],
                      cascadeData = new Vector4[maxCascades];
@@ -118,6 +123,8 @@ public class Shadows
         int cascadeCount = _shadowSettings.directional.cascadeCount;
         int tileOffset = index * cascadeCount;
         Vector3 ratios = _shadowSettings.directional.CascadeRatios;
+        float cullingFactor =
+            Mathf.Max(0f, 0.8f - _shadowSettings.directional.cascadeFade);
         for (int i = 0; i < cascadeCount; i++)
         {
            
@@ -126,6 +133,7 @@ public class Shadows
                 out Matrix4x4 viewMatrix, out Matrix4x4 projectionMatrix,
                 out ShadowSplitData splitData
             );
+            splitData.shadowCascadeBlendCullingFactor = cullingFactor;
             shadowSettings.splitData = splitData;
             if (index == 0) {
                 SetCascadeData(i,splitData.cullingSphere,tileSize);
@@ -142,21 +150,21 @@ public class Shadows
             _commandBuffer.SetGlobalVectorArray(cascadeDataId,cascadeData);
             _commandBuffer.SetGlobalVector(shadowAtlasSizeId,new Vector4(atlasSize, 1f / atlasSize));
             _commandBuffer.SetGlobalDepthBias(0f, _shadowedDirectionalLight.slopeScaleBias);
-            SetKeywords();
+            SetKeywords(directionalFilterKeywords, (int)_shadowSettings.directional.filterMode - 1);
+            SetKeywords(cascadeBlendKeywords, (int)_shadowSettings.directional.CascadeBlendMode - 1);
             ExecuteBuffer();
             _scriptableRenderContext.DrawShadows(ref shadowSettings);
             _commandBuffer.SetGlobalDepthBias(0f,0f);
         }
     }
     
-    void SetKeywords () {
-        int enabledIndex = (int)_shadowSettings.directional.filterMode - 1;
-        for (int i = 0; i < directionalFilterKeywords.Length; i++) {
+    void SetKeywords (string[] keywords, int enabledIndex) {
+        for (int i = 0; i < keywords.Length; i++) {
             if (i == enabledIndex) {
-                _commandBuffer.EnableShaderKeyword(directionalFilterKeywords[i]);
+                _commandBuffer.EnableShaderKeyword(keywords[i]);
             }
             else {
-                _commandBuffer.DisableShaderKeyword(directionalFilterKeywords[i]);
+                _commandBuffer.DisableShaderKeyword(keywords[i]);
             }
         }
     }
