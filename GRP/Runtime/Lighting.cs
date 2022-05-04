@@ -31,10 +31,13 @@ public class Lighting
    {
       _commandBuffer.BeginSample(bufferName);
       m_cullingResults = _cullingResults;
+      //Set Properties
       SetUpShadows(context,_cullingResults,_shadowSettings);
       SetUpLights();
+      //Draw ShadowMap
       _shadows.Render();
       _commandBuffer.EndSample(bufferName);
+      //Execute
       context.ExecuteCommandBuffer(_commandBuffer);
       _commandBuffer.Clear();
    }

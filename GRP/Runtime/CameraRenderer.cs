@@ -58,6 +58,7 @@ namespace GRP.Runtime
 
         private void DrawVisibleGeometry(bool _enableInstancing,bool _enableDynamicBatching)
         {
+            
             var sortSetting = new SortingSettings(m_camera){criteria = SortingCriteria.CommonOpaque};
             var drawingSetting = new DrawingSettings(k_unlitShaderTagId,sortSetting)
             {
@@ -67,11 +68,13 @@ namespace GRP.Runtime
             drawingSetting.SetShaderPassName(1,k_litShaderTagId);
             
             var filteringSetting = new FilteringSettings(RenderQueueRange.opaque);
+            //Draw Opaque
             m_context.DrawRenderers(m_cullingResults,ref drawingSetting,ref filteringSetting);
             
             m_context.DrawSkybox(m_camera);
             sortSetting.criteria = SortingCriteria.CommonTransparent;
             filteringSetting.renderQueueRange = RenderQueueRange.transparent;
+            //Draw Transparent
             m_context.DrawRenderers(m_cullingResults,ref drawingSetting,ref filteringSetting);
 
         }
@@ -91,6 +94,7 @@ namespace GRP.Runtime
 
         private bool Cull(float maxShadowDistance)
         {
+            //Camera Cull
             if (m_camera.TryGetCullingParameters(out var p))
             {
                 p.shadowDistance = Mathf.Min(maxShadowDistance,m_camera.farClipPlane);

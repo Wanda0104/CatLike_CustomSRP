@@ -15,6 +15,18 @@ public class CustomShaderGUI : ShaderGUI {
     bool PremultiplyAlpha {
         set => SetProperty("_PremulAlpha", "_PREMULTIPLY_ALPHA", value);
     }
+    enum ShadowMode {
+        On, Clip, Dither, Off
+    }
+
+    ShadowMode Shadows {
+        set {
+            if (SetProperty("_Shadows", (float)value)) {
+                SetKeyword("_SHADOWS_CLIP", value == ShadowMode.Clip);
+                SetKeyword("_SHADOWS_DITHER", value == ShadowMode.Dither);
+            }
+        }
+    }
 
     BlendMode SrcBlend {
         set => SetProperty("_SrcBlend", (float)value);
@@ -38,6 +50,7 @@ public class CustomShaderGUI : ShaderGUI {
     public override void OnGUI (
         MaterialEditor materialEditor, MaterialProperty[] properties
     ) {
+        EditorGUI.BeginChangeCheck();
         base.OnGUI(materialEditor, properties);
         editor = materialEditor;
         materials = materialEditor.targets;
@@ -49,6 +62,11 @@ public class CustomShaderGUI : ShaderGUI {
             ClipPreset();
             FadePreset();
             TransparentPreset();
+        }
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            SetShadowCasterPass();
         }
     }
     
@@ -79,6 +97,7 @@ public class CustomShaderGUI : ShaderGUI {
             DstBlend = BlendMode.Zero;
             ZWrite = true;
             RenderQueue = RenderQueue.AlphaTest;
+            Shadows = ShadowMode.Clip;
         }
     }
     
@@ -133,4 +152,18 @@ public class CustomShaderGUI : ShaderGUI {
     
     bool HasProperty (string name) =>
         FindProperty(name, properties, false) != null;
+
+    void SetShadowCasterPass()
+    {
+        MaterialProperty shadowProperty = FindProperty("_Shadows", properties, false);
+        if (shadowProperty == null || shadowProperty.hasMixedValue)
+        {
+            return;
+        }
+        bool enabled = shadowProperty.floatValue < (float)ShadowMode.Off;
+        foreach (Material m in materials)
+        {
+            m.SetShaderPassEnabled("ShadowCaster",enabled);
+        }
+    }
 }

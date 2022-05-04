@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -29,16 +30,22 @@ public class PerObjectMaterialProperties : MonoBehaviour
     private void OnValidate()
     {
         _materialPropertyBlock ??= new MaterialPropertyBlock();
-        baseColor = Random.ColorHSV();
-        baseColor.a = Random.value;
-        cutoff = Random.Range(0f, 1f);
+       
         _materialPropertyBlock.SetColor(baseColorId,baseColor);
         _materialPropertyBlock.SetFloat(cutoffId,cutoff);
         _materialPropertyBlock.SetFloat(metallicId, metallic);
         _materialPropertyBlock.SetFloat(smoothnessId, smoothness);
         gameObject.GetComponent<Renderer>().SetPropertyBlock(_materialPropertyBlock);
     }
-
+    [Button("RandomProperty")]
+    public void RandomProperty()
+    {
+        baseColor = Random.ColorHSV();
+        baseColor.a = Random.value;
+        cutoff = Random.Range(0f, 1f);
+        OnValidate();
+    }
+    
     // Update is called once per frame
     void Update()
     {

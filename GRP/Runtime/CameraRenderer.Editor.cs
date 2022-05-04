@@ -67,6 +67,7 @@ namespace GRP.Runtime
 
         partial void PrepareForSceneWindow()
         {
+            //Draw SceneView
             if (m_camera.cameraType == CameraType.SceneView)
             {
                 ScriptableRenderContext.EmitWorldGeometryForSceneView(m_camera);
@@ -75,6 +76,7 @@ namespace GRP.Runtime
 
         partial void PrepareBuffer()
         {
+            //Profiler Sample 
             Profiler.BeginSample("[GRP] Editor Only");
             m_cmd.name = SampleName = string.Format("[GRP]{0}",m_camera.name);
             Profiler.EndSample();
