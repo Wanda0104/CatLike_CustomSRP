@@ -14,6 +14,10 @@ Shader "GEM Render Pipeline/Unlit"
     }
     SubShader
     {
+    	HLSLINCLUDE
+		#include "../ShaderLibrary/Common.hlsl"
+		#include "UnLitInput.hlsl"
+		ENDHLSL
         Pass
         {
             Blend [_SrcBlend][_DstBlend]
@@ -47,6 +51,19 @@ Shader "GEM Render Pipeline/Unlit"
 			#include "ShadowCasterPass.hlsl"
 			ENDHLSL
 		}
+    	
+    	Pass{
+    		Tags{
+    			"LightMode" = "Meta"
+    		}	
+    		Cull off
+    		HLSLPROGRAM
+    		#pragma target 3.5
+    		#pragma vertex MetaPassVertex
+			#pragma fragment MetaPassFragment
+			#include "MetaPass.hlsl"
+    		ENDHLSL
+    	}
     }
     CustomEditor "CustomShaderGUI"
 }

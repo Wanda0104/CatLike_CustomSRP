@@ -17,6 +17,10 @@ Shader "GEM Render Pipeline/Lit"
     }
     SubShader
     {
+    	HLSLINCLUDE
+		#include "../ShaderLibrary/Common.hlsl"
+		#include "LitInput.hlsl"
+		ENDHLSL
         Pass
         {
             Tags{
@@ -31,6 +35,7 @@ Shader "GEM Render Pipeline/Lit"
             #pragma multi_compile _ _CASCADE_BLEND_SOFT _CASCADE_BLEND_DITHER
             #pragma shader_feature _CLIPPING
             #pragma shader_feature _RECEIVE_SHADOWS
+            #pragma multi_compile _ LIGHTMAP_ON
             #pragma multi_compile_instancing
             #pragma vertex LitPassVertex
             #pragma fragment LitPassFragment
@@ -54,6 +59,19 @@ Shader "GEM Render Pipeline/Lit"
 			#include "ShadowCasterPass.hlsl"
 			ENDHLSL
 		}
+    	
+    	Pass{
+    		Tags{
+    			"LightMode" = "Meta"
+    		}	
+    		Cull Off
+    		HLSLPROGRAM
+    		#pragma target 3.5
+    		#pragma vertex MetaPassVertex
+			#pragma fragment MetaPassFragment
+			#include "MetaPass.hlsl"
+    		ENDHLSL
+    	}
     }
     CustomEditor "CustomShaderGUI"
 }

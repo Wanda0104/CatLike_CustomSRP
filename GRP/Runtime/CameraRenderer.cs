@@ -63,7 +63,8 @@ namespace GRP.Runtime
             var drawingSetting = new DrawingSettings(k_unlitShaderTagId,sortSetting)
             {
                 enableInstancing = _enableInstancing,
-                enableDynamicBatching = _enableDynamicBatching
+                enableDynamicBatching = _enableDynamicBatching,
+                perObjectData = PerObjectData.Lightmaps | PerObjectData.LightProbe | PerObjectData.LightProbeProxyVolume,
             };
             drawingSetting.SetShaderPassName(1,k_litShaderTagId);
             
