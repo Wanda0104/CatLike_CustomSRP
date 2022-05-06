@@ -33,12 +33,21 @@ struct DirectionalShadowData
     float normalBias;
 };
 
+// 来源于 perobjData的Shadowmask 
+struct ShadowMask
+{
+    float4 shadows;
+    bool distance;
+    bool always;
+};
+
 //阴影数据 来源于ShadowMap
 struct ShadowData
 {
     int cascadeIndex;
     float strength;
     float cascadeBlend;
+    ShadowMask shadowMask;
 };
 
 
@@ -73,17 +82,8 @@ float FilterDirectionalShadow(float3 positionSTS)
     #endif
 }
 
-float GetDirectionalShadowAttenuation(DirectionalShadowData directional_shadow_data,ShadowData shadow_data,Surface surfaceWS)
+float GetCascadedShadow(DirectionalShadowData directional_shadow_data, ShadowData shadow_data, Surface surfaceWS)
 {
-
-    #if !defined(_RECEIVE_SHADOWS)
-        return 1.0;
-    #endif
-    if (directional_shadow_data.strength <= 0)
-    {
-        return 1.0;
-    }
-    
     float3 normalBias = surfaceWS.normal * (_CascadeDatas[shadow_data.cascadeIndex].y * directional_shadow_data.normalBias);
     float3 positionSTS = mul(
         _DirectionalShadowMatrices[directional_shadow_data.tileIndex],
@@ -102,7 +102,64 @@ float GetDirectionalShadowAttenuation(DirectionalShadowData directional_shadow_d
             FilterDirectionalShadow(positionSTS), shadow, shadow_data.cascadeBlend
         );
     }
-    return lerp(1.0,shadow,directional_shadow_data.strength);
+    return  shadow;
+}
+
+float GetBakedShadow(ShadowMask shadow_mask)
+{
+    float shadow = 1.0;
+    if (shadow_mask.always || shadow_mask.distance)
+    {
+        shadow = shadow_mask.shadows.r;
+    }
+    return shadow;
+}
+
+float GetBakedShadow(ShadowMask shadow_mask,float strength)
+{
+    float shadow = 1.0;
+    if (shadow_mask.always || shadow_mask.distance)
+    {
+        shadow = lerp(1.0,GetBakedShadow(shadow_mask),abs(strength));
+    }
+    return shadow;
+}
+
+float MixBakedAndRuntimeShadow(ShadowData shadow_data,float shadow,float strength)
+{
+    float baked = GetBakedShadow(shadow_data.shadowMask);
+    if (shadow_data.shadowMask.always)
+    {
+        shadow = lerp(1.0, shadow, shadow_data.strength);
+        shadow = min(baked, shadow);
+        return lerp(1.0, shadow, strength);
+    }
+    
+    if (shadow_data.shadowMask.distance) {
+        shadow = lerp(baked,shadow,shadow_data.strength);
+        return lerp(1.0,shadow,strength);
+    }
+    return lerp(1.0,shadow,strength * shadow_data.strength);
+}
+
+float GetDirectionalShadowAttenuation(DirectionalShadowData directional_shadow_data,ShadowData shadow_data,Surface surfaceWS)
+{
+
+    #if !defined(_RECEIVE_SHADOWS)
+        return 1.0;
+    #endif
+    float shadow;
+    if (directional_shadow_data.strength * shadow_data.strength <= 0)
+    {
+        return GetBakedShadow(shadow_data.shadowMask,directional_shadow_data.strength);
+    }
+    else
+    {
+        shadow = GetCascadedShadow(directional_shadow_data, shadow_data, surfaceWS);
+        shadow = lerp(1.0,shadow,directional_shadow_data.strength);
+        shadow = MixBakedAndRuntimeShadow(shadow_data,shadow,directional_shadow_data.strength);
+    }
+    return shadow;
 }
 
 float FadedShadowStrength (float distance, float scale, float fade) {
@@ -112,6 +169,9 @@ float FadedShadowStrength (float distance, float scale, float fade) {
 ShadowData GetShadowData(Surface surfaceWS)
 {
     ShadowData data;
+    data.shadowMask.distance = false;
+    data.shadowMask.always = false;
+    data.shadowMask.shadows = 1.0;
     int i;
     data.strength = FadedShadowStrength(surfaceWS.depth,_ShadowDistanceFade.x,_ShadowDistanceFade.y);
     data.cascadeBlend = 1.0;

@@ -33,6 +33,14 @@ public class Shadows
         "_CASCADE_BLEND_SOFT",
         "_CASCADE_BLEND_DITHER"
     };
+
+    private static string[] shadowMaskKeywords =
+    {
+        "_SHADOW_MASK_ALWAYS",
+        "_SHADOW_MASK_DISTANCE",
+    };
+
+    private bool useShadowMask = false;
     
     //xyz pos, w radius
     static Vector4[] cascadeCullingSpheres = new Vector4[maxCascades],
@@ -47,12 +55,13 @@ public class Shadows
     private ShadowSettings _shadowSettings;
     ShadowedDirectionalLight[] ShadowedDirectionalLights =
         new ShadowedDirectionalLight[maxShadowedDirectionalLightCount];
-    public void SetUp(ScriptableRenderContext scriptableRenderContext,CullingResults cullingResults,ShadowSettings shadowSettings)
+    public void SetUp(ScriptableRenderContext scriptableRenderContext,CullingResults cullingResults,ShadowSettings shadowSettings )
     {
         _scriptableRenderContext = scriptableRenderContext;
         _cullingResults = cullingResults;
         _shadowSettings = shadowSettings;
         ShadowedDirectionalLightCount = 0;
+        useShadowMask = false;
     }
 
     private void ExecuteBuffer()
@@ -64,14 +73,25 @@ public class Shadows
     public Vector3 ReserveDirectionalShadows(Light light, int visibleLightIndex)
     {
         if (ShadowedDirectionalLightCount < maxShadowedDirectionalLightCount &&
-            light.shadows != LightShadows.None && light.shadowStrength > 0f&&
-            _cullingResults.GetShadowCasterBounds(visibleLightIndex, out Bounds b)) {
+            light.shadows != LightShadows.None && light.shadowStrength > 0f)
+        {
+            LightBakingOutput lightBakingOutput = light.bakingOutput;
+            if (lightBakingOutput.lightmapBakeType == LightmapBakeType.Mixed && lightBakingOutput.mixedLightingMode == MixedLightingMode.Shadowmask)
+            {
+                useShadowMask = true;
+            }
+
+            if (!_cullingResults.GetShadowCasterBounds(visibleLightIndex, out Bounds b))
+            {
+                return new Vector3(-light.shadowStrength, 0f, 0f);
+            }
             ShadowedDirectionalLights[ShadowedDirectionalLightCount] =
                 new ShadowedDirectionalLight {
                     visibleLightIndex = visibleLightIndex,
                     slopeScaleBias = light.shadowBias,
                     nearPlaneOffset = light.shadowNearPlane,
                 };
+           
             return new Vector3(
                 light.shadowStrength,   _shadowSettings.directional.cascadeCount * ShadowedDirectionalLightCount++,
                 light.shadowNormalBias
@@ -91,6 +111,10 @@ public class Shadows
         {
             _commandBuffer.GetTemporaryRT(dirShadowAtlasId, 1, 1,32,FilterMode.Bilinear,RenderTextureFormat.Shadowmap);
         }
+        _commandBuffer.BeginSample(_bufferName);
+        SetKeywords(shadowMaskKeywords,useShadowMask ? QualitySettings.shadowmaskMode == ShadowmaskMode.Shadowmask ? 0 : 1  : -1);
+        _commandBuffer.EndSample(_bufferName);
+        ExecuteBuffer();
     }
 
     void RenderDirectionalShadows()

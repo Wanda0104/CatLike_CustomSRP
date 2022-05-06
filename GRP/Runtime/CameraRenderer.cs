@@ -64,7 +64,9 @@ namespace GRP.Runtime
             {
                 enableInstancing = _enableInstancing,
                 enableDynamicBatching = _enableDynamicBatching,
-                perObjectData = PerObjectData.Lightmaps | PerObjectData.LightProbe | PerObjectData.LightProbeProxyVolume,
+                perObjectData = PerObjectData.Lightmaps | PerObjectData.LightProbe | 
+                                PerObjectData.LightProbeProxyVolume | PerObjectData.ShadowMask|
+                                PerObjectData.OcclusionProbe | PerObjectData.OcclusionProbeProxyVolume,
             };
             drawingSetting.SetShaderPassName(1,k_litShaderTagId);
             

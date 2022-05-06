@@ -7,6 +7,9 @@ float4 unity_LODFade;
 real4 unity_WorldTransformParams;
 float3 _WorldSpaceCameraPos;
 
+//Dynamic Object use it
+float4 unity_ProbesOcclusion;
+
 //LightMap
 float4 unity_LightmapST;
 float4 unity_DynamicLightmapST;

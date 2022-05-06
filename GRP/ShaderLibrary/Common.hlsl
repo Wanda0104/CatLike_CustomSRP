@@ -17,6 +17,11 @@ float Square(float v)
 float DistanceSquared(float3 pA, float3 pB) {
     return dot(pA - pB, pA - pB);
 }
+#if defined(_SHADOW_MASK_ALWAYS) || defined(_SHADOW_MASK_DISTANCE)
+//Although this is enough to get shadow masks working via probes, it breaks GPU instancing.
+//The occlusion data can get instanced automatically, but UnityInstancing only does this when SHADOWS_SHADOWMASK is defined. 
+    #define SHADOWS_SHADOWMASK
+#endif
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/UnityInstancing.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl"
 #endif

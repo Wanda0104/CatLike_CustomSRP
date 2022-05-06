@@ -25,5 +25,5 @@ MonoBehaviour:
       cascadeFade: 0.1
       filterMode: 0
       CascadeBlendMode: 0
-    maxDistance: 35
+    maxDistance: 25.8
     distanceFade: 0.24
