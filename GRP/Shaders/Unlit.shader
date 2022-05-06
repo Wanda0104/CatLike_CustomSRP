@@ -3,7 +3,7 @@ Shader "GEM Render Pipeline/Unlit"
     Properties
     {
         _BaseMap("Texture",2D) = "white"{}
-        _BaseColor("Color",Color) = (1.0,1.0,1.0,1.0)
+        [HDR]_BaseColor("Color",Color) = (1.0,1.0,1.0,1.0)
         [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Src Blend", Float) = 1
 		[Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Dst Blend", Float) = 0
         [Enum(Off, 0, On, 1)] _ZWrite ("Z Write", Float) = 1
@@ -11,6 +11,8 @@ Shader "GEM Render Pipeline/Unlit"
         [Toggle(_CLIPPING)] _Clipping ("Alpha Clipping", Float) = 0
         [KeywordEnum(On,Clip,Dither,Off)] _Shadows ("Shadows",Float) = 0
     	[Toggle(_RECEIVE_SHADOWS)] _ReceiveShadows ("Receive Shadows", Float) = 1
+    	[HideInInspector]_MainTex("Texture for Lightmap", 2D) = "white" {}
+    	[HideInInspector] _Color("Color for Lightmap", Color) = (0.5, 0.5, 0.5, 1.0)
     }
     SubShader
     {
@@ -65,5 +67,5 @@ Shader "GEM Render Pipeline/Unlit"
     		ENDHLSL
     	}
     }
-    CustomEditor "CustomShaderGUI"
+    CustomEditor "GRP.Editor.CustomShaderGUI"
 }
