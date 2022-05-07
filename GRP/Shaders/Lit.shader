@@ -18,6 +18,7 @@ Shader "GEM Render Pipeline/Lit"
     	[Toggle(_RECEIVE_SHADOWS)] _ReceiveShadows ("Receive Shadows", Float) = 1
 		[HideInInspector]_MainTex("Texture for Lightmap", 2D) = "white" {}
     	[HideInInspector] _Color("Color for Lightmap", Color) = (0.5, 0.5, 0.5, 1.0)
+    	_Fresnel("Fresnel",Range(0.0,1.0)) = 1
     }
     SubShader
     {

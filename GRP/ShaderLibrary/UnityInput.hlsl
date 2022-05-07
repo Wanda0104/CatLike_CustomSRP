@@ -10,6 +10,7 @@ float3 _WorldSpaceCameraPos;
 //Dynamic Object use it
 float4 unity_ProbesOcclusion;
 
+float4 unity_SpecCube0_HDR;
 //LightMap
 float4 unity_LightmapST;
 float4 unity_DynamicLightmapST;
