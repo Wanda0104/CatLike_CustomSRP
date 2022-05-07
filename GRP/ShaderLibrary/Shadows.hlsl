@@ -31,6 +31,7 @@ struct DirectionalShadowData
     float strength;
     float tileIndex;
     float normalBias;
+    int shadowMaskChannel;
 };
 
 // 来源于 perobjData的Shadowmask 
@@ -105,29 +106,29 @@ float GetCascadedShadow(DirectionalShadowData directional_shadow_data, ShadowDat
     return  shadow;
 }
 
-float GetBakedShadow(ShadowMask shadow_mask)
+float GetBakedShadow(ShadowMask shadow_mask,int maskChanel)
 {
     float shadow = 1.0;
     if (shadow_mask.always || shadow_mask.distance)
     {
-        shadow = shadow_mask.shadows.r;
+        shadow = shadow_mask.shadows[maskChanel];
     }
     return shadow;
 }
 
-float GetBakedShadow(ShadowMask shadow_mask,float strength)
+float GetBakedShadow(ShadowMask shadow_mask,float strength,int maskChanel)
 {
     float shadow = 1.0;
     if (shadow_mask.always || shadow_mask.distance)
     {
-        shadow = lerp(1.0,GetBakedShadow(shadow_mask),abs(strength));
+        shadow = lerp(1.0,GetBakedShadow(shadow_mask,maskChanel),abs(strength));
     }
     return shadow;
 }
 
-float MixBakedAndRuntimeShadow(ShadowData shadow_data,float shadow,float strength)
+float MixBakedAndRuntimeShadow(ShadowData shadow_data,float shadow,float strength,int maskChanel)
 {
-    float baked = GetBakedShadow(shadow_data.shadowMask);
+    float baked = GetBakedShadow(shadow_data.shadowMask,maskChanel);
     if (shadow_data.shadowMask.always)
     {
         shadow = lerp(1.0, shadow, shadow_data.strength);
@@ -151,13 +152,13 @@ float GetDirectionalShadowAttenuation(DirectionalShadowData directional_shadow_d
     float shadow;
     if (directional_shadow_data.strength * shadow_data.strength <= 0)
     {
-        return GetBakedShadow(shadow_data.shadowMask,directional_shadow_data.strength);
+        return GetBakedShadow(shadow_data.shadowMask,directional_shadow_data.strength,directional_shadow_data.shadowMaskChannel);
     }
     else
     {
         shadow = GetCascadedShadow(directional_shadow_data, shadow_data, surfaceWS);
         shadow = lerp(1.0,shadow,directional_shadow_data.strength);
-        shadow = MixBakedAndRuntimeShadow(shadow_data,shadow,directional_shadow_data.strength);
+        shadow = MixBakedAndRuntimeShadow(shadow_data,shadow,directional_shadow_data.strength,directional_shadow_data.shadowMaskChannel);
     }
     return shadow;
 }

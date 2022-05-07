@@ -23,6 +23,7 @@ DirectionalShadowData GetDirectionalShadowData(int lightIndex,ShadowData shadow_
     data.strength = _DirectionalLightShadowData[lightIndex].x ;
     data.tileIndex = _DirectionalLightShadowData[lightIndex].y + shadow_data.cascadeIndex;
     data.normalBias =_DirectionalLightShadowData[lightIndex].z;
+    data.shadowMaskChannel =_DirectionalLightShadowData[lightIndex].w;
     return data;
 }
 
