@@ -6,6 +6,17 @@ Shader "GEM Render Pipeline/Lit"
         _BaseColor("Color",Color) = (0.5,0.5,0.5,1.0)
     	[NoScaleOffset]_EmissionMap("Emission",2D) = "white"{}
     	[HDR]_EmissionColor("EmissionColor",Color) = (1.0,1.0,1.0,1.0)
+    	[Toggle(_MASK_MAP)] _MaskMapToggle ("Mask Map", Float) = 0
+    	[NoScaleOffset] _MaskMap("Mask (MODS)", 2D) = "white" {}
+    	[Toggle(_DETAIL_MAP)] _DetailMapToggle ("Detail Maps", Float) = 0
+    	_DetailMap("Details", 2D) = "linearGrey" {}
+    	_DetailAlbedo("DetailAlbedo",Range(0.0,1.0)) = 1
+    	_DetailSmoothness("DetailSmoothness",Range(0.0,1.0)) = 1
+    	[Toggle(_NORMAL_MAP)] _NormalMapToggle ("Normal Map", Float) = 0
+    	[NoScaleOffset]_NormalMap("Normalmap",2D) = "Bump"{}
+    	_NormalMapScale("NormalScale",Range(0.0,1.0)) = 1
+    	[NoScaleOffset] _DetailNormalMap("Detail Normals", 2D) = "bump" {}
+    	_DetailNormalScale("Detail Normal Scale", Range(0, 1)) = 1
         [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Src Blend", Float) = 1
 		[Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Dst Blend", Float) = 0
         [Enum(Off, 0, On, 1)] _ZWrite ("Z Write", Float) = 1
@@ -19,6 +30,7 @@ Shader "GEM Render Pipeline/Lit"
 		[HideInInspector]_MainTex("Texture for Lightmap", 2D) = "white" {}
     	[HideInInspector] _Color("Color for Lightmap", Color) = (0.5, 0.5, 0.5, 1.0)
     	_Fresnel("Fresnel",Range(0.0,1.0)) = 1
+    	_Occlusion ("Occlusion", Range(0, 1)) = 1
     }
     SubShader
     {
@@ -40,6 +52,9 @@ Shader "GEM Render Pipeline/Lit"
             #pragma multi_compile _ _CASCADE_BLEND_SOFT _CASCADE_BLEND_DITHER
             #pragma multi_compile _ _SHADOW_MASK_ALWAYS _SHADOW_MASK_DISTANCE
             #pragma multi_compile _ LOD_FADE_CROSSFADE
+            #pragma shader_feature _NORMAL_MAP
+            #pragma shader_feature _MASK_MAP
+            #pragma shader_feature _DETAIL_MAP
             #pragma shader_feature _CLIPPING
             #pragma shader_feature _RECEIVE_SHADOWS
             #pragma multi_compile _ LIGHTMAP_ON
