@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 #if UNITY_EDITOR
@@ -7,7 +5,6 @@ using UnityEditor;
 using UnityEngine.Profiling;
 
 #endif
-
 namespace GRP.Runtime
 {
     public partial class CameraRenderer
